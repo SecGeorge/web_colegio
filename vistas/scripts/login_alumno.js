@@ -4,13 +4,13 @@ $("#frmAcceso").on('submit',function(e)
     logina=$("#logina").val();
     clavea=$("#clavea").val();
 
-    $.post("../ajax/usuario.php?op=verificar",
+    $.post("../ajax/alumno.php?op=verificar",
         {"logina":logina,"clavea":clavea},
         function(data)
     {
-        if (data!="null")
+        if ($.trim(data)!="null" && $.trim(data)!="")
         {
-            $(location).attr("href","escritorio.php");
+            $(location).attr("href","aula_alumno.php");
         }
         else
         {

@@ -1,18 +1,15 @@
-<?php 
-//incluir la conexion de base de datos
+<?php
+
 require "../config/Conexion.php";
 class Usuario{
 
-
-	//implementamos nuestro constructor
 public function __construct(){
 
 }
 
-//metodo insertar regiustro
 public function insertar($nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$clave,$imagen,$permisos){
 	$sql="INSERT INTO usuario (nombre,tipo_documento,num_documento,direccion,telefono,email,cargo,login,clave,imagen,condicion) VALUES ('$nombre','$tipo_documento','$num_documento','$direccion','$telefono','$email','$cargo','$login','$clave','$imagen','1')";
-	//return ejecutarConsulta($sql);
+
 	 $idusuarionew=ejecutarConsulta_retornarID($sql);
 	 $num_elementos=0;
 	 $sw=true;
@@ -28,11 +25,10 @@ public function insertar($nombre,$tipo_documento,$num_documento,$direccion,$tele
 }
 
 public function editar($idusuario,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$email,$cargo,$login,$imagen,$permisos){
-	$sql="UPDATE usuario SET nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',telefono='$telefono',email='$email',cargo='$cargo',login='$login',imagen='$imagen' 
+	$sql="UPDATE usuario SET nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',telefono='$telefono',email='$email',cargo='$cargo',login='$login',imagen='$imagen'
 	WHERE idusuario='$idusuario'";
 	 ejecutarConsulta($sql);
 
-	 //eliminar permisos asignados
 	 $sqldel="DELETE FROM usuario_permiso WHERE idusuario='$idusuario'";
 	 ejecutarConsulta($sqldel);
 
@@ -65,29 +61,30 @@ public function activar($idusuario){
 	return ejecutarConsulta($sql);
 }
 
-//metodo para mostrar registros
 public function mostrar($idusuario){
 	$sql="SELECT * FROM usuario WHERE idusuario='$idusuario'";
 	return ejecutarConsultaSimpleFila($sql);
 }
 
-//listar registros
 public function listar(){
 	$sql="SELECT * FROM usuario";
 	return ejecutarConsulta($sql);
 }
 
-//metodo para listar permmisos marcados de un usuario especifico
+public function listarProfesores(){
+	$sql="SELECT DISTINCT u.idusuario,u.nombre FROM usuario u INNER JOIN usuario_permiso up ON u.idusuario=up.idusuario WHERE up.idpermiso=2 AND u.condicion=1 ORDER BY u.nombre";
+	return ejecutarConsulta($sql);
+}
+
 public function listarmarcados($idusuario){
 	$sql="SELECT * FROM usuario_permiso WHERE idusuario='$idusuario'";
 	return ejecutarConsulta($sql);
 }
 
-//Función para verificar el acceso al sistema
 	public function verificar($login,$clave)
     {
-    	$sql="SELECT idusuario,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login FROM usuario WHERE login='$login' AND clave='$clave' AND condicion='1'"; 
-    	return ejecutarConsulta($sql);  
+    	$sql="SELECT idusuario,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login FROM usuario WHERE login='$login' AND clave='$clave' AND condicion='1'";
+    	return ejecutarConsulta($sql);
     }
 }
 

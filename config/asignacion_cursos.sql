@@ -1,0 +1,2 @@
+ALTER TABLE block ADD COLUMN IF NOT EXISTS idusuario INT(11) DEFAULT NULL;
+ALTER TABLE block ADD KEY IF NOT EXISTS block_user (idusuario);

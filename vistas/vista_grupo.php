@@ -1,5 +1,5 @@
-<?php 
-//activamos almacenamiento en el buffer
+<?php
+
 ob_start();
 session_start();
 if (!isset($_SESSION['nombre'])) {
@@ -9,66 +9,52 @@ if (!isset($_SESSION['nombre'])) {
 require 'header.php';
 if ($_SESSION['grupos']==1) {
 
-   /* if(isset($_GET['idgrupo'])) {
-      $_SESSION['idgrupo'] = $_GET['idgrupo'];
-    };*/
         $idgrupo=$_GET['idgrupo'];
 
   require_once "../modelos/Grupos.php";
   $grupos = new Grupos();
-  $rspta = $grupos->mostrar_grupo($idgrupo); 
+  $rspta = $grupos->mostrar_grupo($idgrupo);
   $reg=$rspta->fetch_object();
   $nombre_grupo=$reg->nombre;
 
-
  ?>
     <div class="content-wrapper">
-    <!-- Main content -->
+
     <section class="content">
 
-      <!-- Default box -->
-      <div class="row">  
+      <div class="row">
         <div class="col-md-12">
+      <?php $activo='alumnos'; require 'grupo_nav.php'; ?>
       <div class="box">
 <div class="box-header with-border">
-  <h1 class="box-title">Grupo: <?php echo $nombre_grupo; ?> <button class="btn btn-success" onclick="mostrarform(true)" id="btnagregar"><i class="fa fa-plus-circle"></i>Agregar Alumno</button>  </h1>
-   <a id="btnasistencia" href="asistencia.php?idgrupo=<?php echo $idgrupo; ?>" class="btn btn-warning"><i class='fa fa-check'></i> Asistencia</a>
-  <a  id="btnconducta" href="conducta.php?idgrupo=<?php echo $idgrupo; ?>" class="btn btn-primary"><i class='fa fa-smile-o'></i> Comportamiento</a>
-  <a id="btncalificaciones" href="calificaciones.php?idgrupo=<?php echo $idgrupo; ?>" class="btn btn-danger"><i class='fa fa-tasks'></i> Calificaciones</a>
-  <a id="btncursos" href="cursos.php?idgrupo=<?php echo $idgrupo; ?>" class="btn btn-primary"><i class='fa fa-th-large'></i> Cursos</a>
-  <a  id="btnlistas" href="listasis.php?idgrupo=<?php echo $idgrupo; ?>" class="btn btn-info"><i class='fa fa-th-list'></i> Listas</a>
-
-
-
-
+  <h1 class="box-title"><i class="fa fa-users" style="color:#0f6cbf;"></i> Alumnos del grado</h1>
   <div class="box-tools pull-right">
-    <a id="btngrupos" href="escritorio.php"><button class="btn btn-info"><i class='fa fa-th-large'></i> Grupos</button></a>
+    <button class="btn btn-success" onclick="mostrarform(true)" id="btnagregar"><i class="fa fa-plus-circle"></i> Agregar Alumno</button>
   </div>
 </div>
-<!--box-header-->
-<!--centro-->
+
 <div class="panel-body table-responsive" id="listadoregistros">
   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover">
     <thead>
-      <th>Opciones</th>
       <th>Imagen</th>
       <th>Nombre</th>
       <th>Apellidos</th>
       <th>Telefono</th>
       <th>Dirección</th>
       <th>Email</th>
+      <th>Opciones</th>
     </thead>
     <tbody>
     </tbody>
     <tfoot>
-      <th>Opciones</th>
       <th>Imagen</th>
       <th>Nombre</th>
       <th>Apellidos</th>
       <th>Telefono</th>
       <th>Dirección</th>
       <th>Email</th>
-    </tfoot>   
+      <th>Opciones</th>
+    </tfoot>
   </table>
 </div>
 <div class="panel-body" id="formularioregistros">
@@ -108,24 +94,23 @@ if ($_SESSION['grupos']==1) {
     </div>
   </form>
 </div>
-<!--fin centro-->
+
       </div>
       </div>
       </div>
-      <!-- /.box -->
 
     </section>
-    <!-- /.content -->
+
   </div>
-<?php 
+<?php
 }else{
- require 'noacceso.php'; 
+ require 'noacceso.php';
 }
 require 'footer.php'
  ?>
  <script src="scripts/vista_grupo.js"></script>
 
- <?php 
+ <?php
 }
 
 ob_end_flush();

@@ -1,12 +1,11 @@
 <?php
-//activamos almacenamiento en el buffer
+
 ob_start();
 session_start();
 if (!isset($_SESSION['nombre'])) {
   header("Location: login.html");
 }else{
 
- 
 require 'header.php';
 
 if ($_SESSION['escritorio']==1) {
@@ -20,97 +19,89 @@ $user_id=$_SESSION["idusuario"];
 
  ?>
     <div class="content-wrapper">
-    <!-- Main content -->
+
     <section class="content">
 
-      <!-- Default box -->
       <div class="row">
         <div class="col-md-12">
       <div class="box">
 <div class="panel-body">
-<?php $rspta=$consulta->cantidadgrupos($user_id);
-$colores = array("box box-success direct-chat direct-chat-success bg-green", "box box-primary direct-chat direct-chat-primary bg-aqua", "box box-warning direct-chat direct-chat-warning bg-yellow", "box box-danger direct-chat direct-chat-danger bg-red");
-      while ($reg=$rspta->fetch_object()) {
-        $idgrupo=$reg->idgrupo;
-        $nombre_grupo=$reg->nombre;
-        ?>
-
-
-<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-          <!-- DIRECT CHAT SUCCESS -->
-          <div class="<?php echo $colores[array_rand($colores)]; ?> collapsed-box">
-            <div class="box-header with-border">
-              <h3 class="box-title"><?php echo $nombre_grupo; ?></h3>
-
-              <div class="box-tools pull-right">
-                <span data-toggle="tooltip" title="" class="badge" data-original-title="Cantidad de Estudiantes">
-                  <?php 
-                    $rsptag=$consulta->cantidadg($user_id,$idgrupo);
-                    while ($regrupo=$rsptag->fetch_object()) {
-                      echo $regrupo->total_alumnos;
-                    }
-                   ?>
-                </span>
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                </button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" style="">
-              <!-- Conversations are loaded here -->
-              <div class="direct-chat-messages">
-                <!-- Message. Default to the left -->
-                <div class="direct-chat-msg">
-
-                    <?php
-                    $rsptas=$consulta->cantidadalumnos_porgrupo($user_id,$idgrupo);
-                    while ($reg=$rsptas->fetch_object()) {
-                      
-                   if (empty($reg->image)){
-                    echo ' <img class="img-circle" src="../files/articulos/anonymous.png" height="50px" width="50px">';
-
-                  }else echo '<img class="img-circle" src="../files/articulos/'. $reg->image.'" height="50px" width="50px">';
-                     } ?>
-                  <!-- /.direct-chat-info -->
-                  <!-- /.direct-chat-text -->
-                </div>
-              </div>
-              <!--/.direct-chat-messages-->
-              <!-- /.direct-chat-pane -->
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer" style="">
-              <a href="vista_grupo.php?idgrupo=<?php echo $idgrupo; ?>" class="btn btn-default form-control" >Ir... <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-            <!-- /.box-footer-->
-          </div>
-          <!--/.direct-chat -->
-        </div>
-
-
+<style>
+  .escritorio-head{margin:6px 4px 24px;}
+  .escritorio-head h2{font-size:23px;font-weight:700;color:#2b3542;margin:0;}
+  .escritorio-head p{color:#7a8797;font-size:14px;margin:4px 0 0;}
+  .grado-card{background:var(--soft);border:1px solid rgba(0,0,0,.05);border-radius:18px;padding:24px;margin-bottom:26px;box-shadow:0 2px 8px rgba(0,0,0,.05);transition:.18s;min-height:198px;display:flex;flex-direction:column;}
+  .grado-card:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(0,0,0,.12);}
+  .gc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;}
+  .gc-ico{width:58px;height:58px;border-radius:16px;background:#fff;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 3px 8px rgba(0,0,0,.07);}
+  .gc-count{color:var(--accent);font-weight:800;font-size:26px;line-height:1;text-align:right;}
+  .gc-count small{display:block;font-weight:600;font-size:11px;color:#8593a2;text-transform:uppercase;letter-spacing:.6px;margin-top:4px;}
+  .gc-name{font-size:19px;font-weight:700;color:#2b3542;margin:0 0 auto;line-height:1.3;}
+  .gc-btn{margin-top:18px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:#fff;padding:11px 20px;border-radius:12px;text-decoration:none;font-weight:600;font-size:14px;transition:.15s;align-self:flex-start;box-shadow:0 4px 10px rgba(0,0,0,.08);}
+  .gc-btn:hover{filter:brightness(.93);color:#fff;}
+</style>
+<div class="escritorio-head">
+  <h2><i class="fa fa-graduation-cap" style="color:#3b82f6;"></i> Mis Grados</h2>
+  <p>Selecciona un grado para ingresar a su aula virtual.</p>
+</div>
+<?php
+$rspta=$consulta->gradosDeProfesor($user_id);
+$temas = array(
+  array('#3b82f6','#eef4ff'),
+  array('#10b981','#e9fbf3'),
+  array('#f59e0b','#fff6e6'),
+  array('#8b5cf6','#f3effe'),
+  array('#ec4899','#fdeef6'),
+  array('#14b8a6','#e7faf7')
+);
+$idx=0;
+while ($reg=$rspta->fetch_object()) {
+  $idgrupo=$reg->idgrupo;
+  $nombre_grupo=$reg->nombre;
+  $tema=$temas[$idx % count($temas)];
+  $idx++;
+  $total=0;
+  $rsptag=$consulta->cantidadPorGrado($idgrupo);
+  while ($regrupo=$rsptag->fetch_object()) { $total=$regrupo->total_alumnos; }
+  ?>
+  <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+    <div class="grado-card" style="--accent:<?php echo $tema[0]; ?>;--soft:<?php echo $tema[1]; ?>;">
+      <div class="gc-top">
+        <span class="gc-ico"><i class="fa fa-graduation-cap"></i></span>
+        <span class="gc-count"><?php echo $total; ?><small>Alumnos</small></span>
+      </div>
+      <h3 class="gc-name"><?php echo $nombre_grupo; ?></h3>
+      <a href="aula.php?idgrupo=<?php echo $idgrupo; ?>" class="gc-btn">Ingresar <i class="fa fa-arrow-right"></i></a>
+    </div>
+  </div>
 <?php } ?>
-
+<?php if ($idx==0): ?>
+  <div class="col-md-12">
+    <div style="background:#fff;border:1px dashed #cfd8e6;border-radius:16px;padding:40px;text-align:center;color:#8593a2;">
+      <i class="fa fa-info-circle" style="font-size:38px;color:#cdd8e8;"></i>
+      <p style="margin-top:12px;font-size:15px;">Aun no tienes grados ni cursos asignados. Pide al administrador que te asigne cursos.</p>
+    </div>
+  </div>
+<?php endif; ?>
 
 </div>
 
-<!--fin centro-->
       </div>
       </div>
       </div>
-      <!-- /.box -->
 
     </section>
-    <!-- /.content -->
+
   </div>
-<?php 
+<?php
 }else{
- require 'noacceso.php'; 
+ require 'noacceso.php';
 }
 
 require 'footer.php';
  ?>
 
- <?php 
+ <?php
 }
 
 ob_end_flush();

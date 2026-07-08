@@ -1,6 +1,5 @@
 var tabla;
 
-//funcion que se ejecuta al inicio
 function init(){
 
    listar();
@@ -13,7 +12,6 @@ function init(){
    $("#fecha_finc").change(listarc);
 }
 
-//funcion listar asistencia
 function listar(){
 	var  fecha_inicio = $("#fecha_inicio").val();
     var fecha_fin = $("#fecha_fin").val();
@@ -26,7 +24,6 @@ function listar(){
 		})
 }
 
-//funcion listar comportamiento
 function listarc(){
 	var  fecha_inicio = $("#fecha_inicioc").val();
     var fecha_fin = $("#fecha_finc").val();
@@ -39,9 +36,8 @@ function listarc(){
 		})
 }
 
-//funcion listar comportamiento
 function listar_calificacion(){
- 
+
 	var  team_id = $("#idgrupo").val();
 	$.post("../ajax/consultas.php?op=listar_calificacion",{idgrupo:team_id},
 		function(data,status)
@@ -52,6 +48,4 @@ function listar_calificacion(){
 }
 
 init();
-
-
 

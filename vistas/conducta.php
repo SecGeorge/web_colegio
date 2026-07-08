@@ -1,4 +1,4 @@
-<?php 
+<?php
 ob_start();
 session_start();
 if (!isset($_SESSION['nombre'])) {
@@ -8,9 +8,6 @@ if (!isset($_SESSION['nombre'])) {
 require 'header.php';
 if ($_SESSION['grupos']==1) {
 
-   /* if(isset($_GET['idgrupo'])) {
-      $_SESSION['idgrupo'] = $_GET['idgrupo'];
-    };*/
         $idgrupo=$_GET['idgrupo'];
 
   require_once "../modelos/Grupos.php";
@@ -19,13 +16,12 @@ if ($_SESSION['grupos']==1) {
   $reg=$rspta->fetch_object();
   $nombre_grupo=$reg->nombre;
 
-
  ?>
     <div class="content-wrapper">
-    <!-- Main content -->
-    <section class="content">
 
-      <!-- Default box -->
+    <section class="content">
+      <?php $activo='conducta'; require 'grupo_nav.php'; ?>
+
       <div class="row">
         <div class="col-md-12">
       <div class="box">
@@ -36,43 +32,38 @@ if ($_SESSION['grupos']==1) {
     <a href="../vistas/grupos.php"><button class="btn btn-info"><i class='fa fa-th-large'></i> Grupos</button></a>
   </div>
 </div>
-<!--box-header-->
-<!--centro-->
+
 <div class="panel-body table-responsive" id="listadoregistros">
   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover">
     <thead>
-      <th>Opciones</th>
       <th>Imagen</th>
       <th>Nombre</th>
       <th>Apellidos</th>
       <th>Telefono</th>
       <th>Conducta</th>
+      <th>Opciones</th>
     </thead>
     <tbody>
     </tbody>
     <tfoot>
-      <th>Opciones</th>
       <th>Imagen</th>
       <th>Nombre</th>
       <th>Apellidos</th>
       <th>Telefono</th>
       <th>Conducta</th>
-    </tfoot>   
+      <th>Opciones</th>
+    </tfoot>
   </table>
 </div>
-<!--fin centro-->
+
       </div>
       </div>
       </div>
-      <!-- /.box -->
 
     </section>
-    <!-- /.content -->
+
   </div>
 
-
-
-  <!--Modal-->
   <div class="modal fade" id="getCodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -86,9 +77,9 @@ if ($_SESSION['grupos']==1) {
       <label for="">Descripcion(*):</label>
         <input type="hidden" id="idconducta" name="idconducta">
         <input type="hidden" id="alumn_id" name="alumn_id">
-        <input type="hidden" id="fecha_conducta" name="fecha_conducta"> 
+        <input type="hidden" id="fecha_conducta" name="fecha_conducta">
         <input type="hidden" id="idgrupo" name="idgrupo" value="<?php echo $_GET["idgrupo"];?>">
-        <select class="form-control " id="tipo_conducta"  name="tipo_conducta">        
+        <select class="form-control " id="tipo_conducta"  name="tipo_conducta">
           <option value="1"> Normal</option>
           <option value="2"> Buena</option>
           <option value="3"> Excelente</option>
@@ -111,22 +102,15 @@ if ($_SESSION['grupos']==1) {
     </div>
   </div>
 
-
-
-
-
-
-
-
-<?php 
+<?php
 }else{
- require 'noacceso.php'; 
+ require 'noacceso.php';
 }
 require 'footer.php'
  ?>
  <script src="scripts/conducta.js"></script>
 
- <?php 
+ <?php
 }
 
 ob_end_flush();

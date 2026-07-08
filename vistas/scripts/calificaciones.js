@@ -1,17 +1,13 @@
 var tabla;
 
-//funcion que se ejecuta al inicio
 function init(){
 	var  team_id = $("#idgrupo").val();
    listar();
 
-    //cargamos los items al select cliente
    $.post("../ajax/cursos.php?op=selectCursos",{idgrupo:team_id}, function(r){
    	$("#curso").html(r);
    	$('#curso').selectpicker('refresh');
    });
-
-
 
       $("#formulario").on("submit",function(e){
    	guardaryeditar(e);
@@ -19,7 +15,6 @@ function init(){
 
 }
 
-//campturamos el id del curso la hacer cambio en el select curso
 $("#curso").change(function(){
 	var idcurso=$("#curso").val();
 	$("#idcurso").val(idcurso);
@@ -27,7 +22,6 @@ $("#curso").change(function(){
 
 });
 
-//FUNCION PARA VERIFICAR SI YA SE INGRESO UNA CALIFICACION DE UN CURSO
 function verificar(id){
 	var idcurso = $("#idcurso").val();
 
@@ -61,11 +55,9 @@ function verificar(id){
 					}
 		})
 	limpiar();
-		
+
 }
 
-
-//funcion limpiar
 function limpiar(){
 	$("#idcalificacion").val("");
 	$("#alumn_id").val("");
@@ -74,13 +66,12 @@ function limpiar(){
 	$('#getCodeModal').modal('hide')
 }
 
-//funcion listar
 function listar(){
 		var  team_id = $("#idgrupo").val();
 	tabla=$('#tbllistado').dataTable({
-		"aProcessing": true,//activamos el procedimiento del datatable
-		"aServerSide": true,//paginacion y filrado realizados por el server
-		dom: 'Bfrtip',//definimos los elementos del control de la tabla
+		"aProcessing": true,
+		"aServerSide": true,
+		dom: 'Bfrtip',
 		buttons: [
                   'copyHtml5',
                   'excelHtml5',
@@ -93,19 +84,19 @@ function listar(){
 			data:{idgrupo:team_id},
 			type: "get",
 			dataType : "json",
-			error:function(e){  
+			error:function(e){
 				console.log(e.responseText);
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":10,//paginacion
-		"order":[[0,"desc"]]//ordenar (columna, orden)
+		"iDisplayLength":10,
+		"columnDefs":[{ "targets":[0,4,5], "orderable":false }],
+		"order":[]
 	}).DataTable();
 }
 
-//FUNCION GUARDAR O EDITAR
 function guardaryeditar(e){
-     e.preventDefault();//no se activara la accion predeterminada 
+     e.preventDefault();
      $("#btnGuardar").prop("disabled",false);
      var formData=new FormData($("#formulario")[0]);
 
@@ -125,6 +116,5 @@ function guardaryeditar(e){
 
      limpiar();
 }
-
 
 init();  

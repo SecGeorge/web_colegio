@@ -1,6 +1,6 @@
-<?php 
+<?php
 require_once "../modelos/Grupos.php";
-if (strlen(session_id())<1) 
+if (strlen(session_id())<1)
 	session_start();
 
 $grupos = new Grupos();
@@ -9,7 +9,6 @@ $idgrupo=isset($_POST["idgrupo"])? limpiarCadena($_POST["idgrupo"]):"";
 $idusuario=$_SESSION["idusuario"];
 $nombre=isset($_POST["nombre"])? limpiarCadena($_POST["nombre"]):"";
 $favorito=isset($_POST["favorito"])? 1 :0;
-
 
 switch ($_GET["op"]) {
 	case 'guardaryeditar':
@@ -21,13 +20,12 @@ switch ($_GET["op"]) {
 		echo $rspta ? "Datos actualizados correctamente" : "No se pudo actualizar los datos";
 	}
 		break;
-	
 
 	case 'anular':
 		$rspta=$grupos->anular($idgrupo);
 		echo $rspta ? "Ingreso anulado correctamente" : "No se pudo anular el ingreso";
 		break;
-	
+
 	case 'mostrar':
 		$rspta=$grupos->mostrar($idgrupo);
 		echo json_encode($rspta);
@@ -38,22 +36,21 @@ switch ($_GET["op"]) {
 		$data=Array();
 
 		while ($reg=$rspta->fetch_object()) {
-                
 
 			$data[]=array(
 
-			"0"=>'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idgrupo.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->idgrupo.')"><i class="fa fa-close"></i></button>',
-            "1"=>$reg->nombre,
-            "2"=>$reg->usuario
+			"0"=>$reg->nombre,
+            "1"=>$reg->usuario,
+            "2"=>'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idgrupo.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->idgrupo.')"><i class="fa fa-close"></i></button>'
               );
 		}
-		$results=array( 
-             "sEcho"=>1,//info para datatables
-             "iTotalRecords"=>count($data),//enviamos el total de registros al datatable
-             "iTotalDisplayRecords"=>count($data),//enviamos el total de registros a visualizar
-             "aaData"=>$data); 
+		$results=array(
+             "sEcho"=>1,
+             "iTotalRecords"=>count($data),
+             "iTotalDisplayRecords"=>count($data),
+             "aaData"=>$data);
 		echo json_encode($results);
-		break; 
+		break;
 
 }
  ?> 

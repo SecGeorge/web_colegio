@@ -1,6 +1,5 @@
 var tabla;
 
-//funcion que se ejecuta al inicio
 function init(){
    mostrarform(false);
    listar();
@@ -9,15 +8,10 @@ function init(){
    	guardaryeditar(e);
    })
 
-   //cargamos los items al celect categoria
-
    $("#imagenmuestra").hide();
-
-
 
 }
 
-//funcion limpiar
 function limpiar(){
 	$("#codigo").val("");
 	$("#nombre").val("");
@@ -28,8 +22,7 @@ function limpiar(){
 	$("#print").hide();
 	$("#idalumno").val("");
 }
- 
-//funcion mostrar formulario
+
 function mostrarform(flag){
 	limpiar();
 	if(flag){
@@ -58,39 +51,35 @@ function mostrarform(flag){
 	}
 }
 
-
-
-//cancelar form
 function cancelarform(){
 	limpiar();
 	mostrarform(false);
 }
 
-//funcion listar
 function listar(){
 	var  team_id = $("#idgrupo").val();
 	tabla=$('#tbllistado').dataTable({
-		"aProcessing": true,//activamos el procedimiento del datatable
-		"aServerSide": true,//paginacion y filrado realizados por el server
-		dom: 'Bfrtip',//definimos los elementos del control de la tabla
+		"aProcessing": true,
+		"aServerSide": true,
+		dom: 'Bfrtip',
         buttons: [
             {
                 extend: 'copyHtml5',
                 text:'Copiar',
                 exportOptions: {
-                    columns: [ 0, ':visible' ]
+                    columns: [ 1, 2, 3, 4, 5 ]
                 }
             },
             {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: ':visible'
+                    columns: [ 1, 2, 3, 4, 5 ]
                 }
             },
             {
                 extend: 'pdfHtml5',
                 exportOptions: {
-                    columns: [ 0, 1, 2, 5 ]
+                    columns: [ 1, 2, 3, 4, 5 ]
                 }
             },
             {
@@ -105,21 +94,19 @@ function listar(){
 			data:{idgrupo:team_id},
 			type: "get",
 			dataType : "json",
-			error:function(e){  
+			error:function(e){
 				console.log(e.responseText);
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":10,//paginacion
-		"order":[[0,"desc"]]//ordenar (columna, orden)
+		"iDisplayLength":10,
+		"columnDefs":[{ "targets":[0,6], "orderable":false }],
+		"order":[]
 	}).DataTable();
 }
 
-
-
-//funcion para guardaryeditar
 function guardaryeditar(e){
-     e.preventDefault();//no se activara la accion predeterminada 
+     e.preventDefault();
      $("#btnGuardar").prop("disabled",true);
      var formData=new FormData($("#formulario")[0]);
 
@@ -158,8 +145,6 @@ function mostrar(id){
 		})
 }
 
-
-//funcion para desactivar
 function desactivar(idalumno){
 	bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
 		if (result) {
@@ -181,6 +166,5 @@ function activar(idalumno){
 		}
 	})
 }
-
 
 init(); 

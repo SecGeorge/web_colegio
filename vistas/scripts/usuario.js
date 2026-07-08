@@ -1,6 +1,5 @@
 var tabla;
 
-//funcion que se ejecuta al inicio
 function init(){
    mostrarform(false);
    mostrarform_clave(false);
@@ -13,13 +12,12 @@ $("#formularioc").on("submit",function(c){
    })
 
    $("#imagenmuestra").hide();
-//mostramos los permisos
+
 $.post("../ajax/usuario.php?op=permisos&id=", function(r){
 	$("#permisos").html(r);
 });
 }
 
-//funcion limpiar
 function limpiar(){
 	$("#nombre").val("");
     $("#num_documento").val("");
@@ -34,7 +32,6 @@ function limpiar(){
 	$("#idusuario").val("");
 }
 
-//funcion mostrar formulario
 function mostrarform(flag){
 	limpiar();
 	if(flag){
@@ -61,7 +58,7 @@ function mostrarform_clave(flag){
 		$("#btnagregar").show();
 	}
 }
-//cancelar form
+
 function cancelarform(){
 	$("#claves").show();
 	limpiar();
@@ -72,12 +69,12 @@ function cancelarform_clave(){
 	mostrarform_clave(false);
 
 }
-//funcion listar
+
 function listar(){
 	tabla=$('#tbllistado').dataTable({
-		"aProcessing": true,//activamos el procedimiento del datatable
-		"aServerSide": true,//paginacion y filrado realizados por el server
-		dom: 'Bfrtip',//definimos los elementos del control de la tabla
+		"aProcessing": true,
+		"aServerSide": true,
+		dom: 'Bfrtip',
 		buttons: [
                   'copyHtml5',
                   'excelHtml5',
@@ -94,13 +91,14 @@ function listar(){
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":5,//paginacion
-		"order":[[0,"desc"]]//ordenar (columna, orden)
+		"iDisplayLength":5,
+		"columnDefs":[{ "targets":[6,8], "orderable":false }],
+		"order":[]
 	}).DataTable();
 }
-//funcion para guardaryeditar
+
 function guardaryeditar(e){
-     e.preventDefault();//no se activara la accion predeterminada 
+     e.preventDefault();
      $("#btnGuardar").prop("disabled",true);
      var formData=new FormData($("#formulario")[0]);
 
@@ -122,7 +120,7 @@ $("#claves").show();
 }
 
 function editar_clave(c){
-     c.preventDefault();//no se activara la accion predeterminada 
+     c.preventDefault();
      $("#btnGuardar_clave").prop("disabled",true);
      var formData=new FormData($("#formularioc")[0]);
 
@@ -150,7 +148,7 @@ function mostrar(idusuario){
 			mostrarform(true);
 			if ($("#idusuario").val(data.idusuario).length==0) {
            	$("#claves").show();
-           	
+
            }else{
 			$("#claves").hide();
 			}
@@ -163,13 +161,12 @@ function mostrar(idusuario){
             $("#email").val(data.email);
             $("#cargo").val(data.cargo);
             $("#login").val(data.login);
-        
+
             $("#imagenmuestra").show();
             $("#imagenmuestra").attr("src","../files/usuarios/"+data.imagen);
             $("#imagenactual").val(data.imagen);
             $("#idusuario").val(data.idusuario);
 
- 
 		});
 	$.post("../ajax/usuario.php?op=permisos&id="+idusuario, function(r){
 	$("#permisos").html(r);
@@ -187,7 +184,6 @@ function mostrar_clave(idusuario){
 		});
 }
 
-//funcion para desactivar
 function desactivar(idusuario){
 	bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
 		if (result) {
@@ -209,6 +205,5 @@ function activar(idusuario){
 		}
 	})
 }
-
 
 init();

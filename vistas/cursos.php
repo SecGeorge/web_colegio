@@ -5,7 +5,6 @@ if (!isset($_SESSION['nombre'])) {
   header("Location: login.html");
 }else{
 
-
 require 'header.php';
 
 if ($_SESSION['grupos']==1) {
@@ -13,12 +12,14 @@ if ($_SESSION['grupos']==1) {
  ?>
     <div class="content-wrapper">
     <section class="content">
+      <?php $activo='cursos'; require 'grupo_nav.php'; ?>
 
       <div class="row">
         <div class="col-md-12">
       <div class="box">
 <div class="box-header with-border">
-  <h1 class="box-title">Cursos <button class="btn btn-success" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i>Agregar</button></h1>
+  <h1 class="box-title">Cursos <?php if ($_SESSION['acceso']==1): ?><button class="btn btn-success" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i>Agregar</button><?php endif; ?></h1>
+  <?php if ($_SESSION['acceso']!=1): ?><small class="text-muted" style="margin-left:6px;">Cursos asignados a ti en este grado</small><?php endif; ?>
   <div class="box-tools pull-right">
   <a href="../vistas/vista_grupo.php?idgrupo=<?php echo $_GET["idgrupo"] ?>"><button class="btn btn-info"><i class='fa fa-arrow-circle-left'></i> Volver</button></a>
   </div>
@@ -26,16 +27,10 @@ if ($_SESSION['grupos']==1) {
 <div class="panel-body table-responsive" id="listadoregistros">
   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover">
     <thead>
-      <th>Opciones</th>
-      <th>Nombre</th>
-
+      <th>Curso</th>
     </thead>
     <tbody>
     </tbody>
-    <tfoot>
-       <th>Opciones</th>
-      <th>Nombre</th>
-    </tfoot>   
   </table>
 </div>
 <div class="panel-body" style="height: 400px;" id="formularioregistros">
@@ -53,24 +48,23 @@ if ($_SESSION['grupos']==1) {
     </div>
   </form>
 </div>
-<!--fin centro-->
+
       </div>
       </div>
       </div>
-      <!-- /.box -->
 
     </section>
-    <!-- /.content -->
+
   </div>
-<?php 
+<?php
 }else{
- require 'noacceso.php'; 
+ require 'noacceso.php';
 }
 
 require 'footer.php';
  ?>
  <script src="scripts/cursos.js"></script>
- <?php 
+ <?php
 }
 
 ob_end_flush();

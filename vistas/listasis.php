@@ -1,11 +1,10 @@
 <?php
-//activamos almacenamiento en el buffer
+
 ob_start();
 session_start();
 if (!isset($_SESSION['nombre'])) {
   header("Location: login.html");
 }else{
-
 
 require 'header.php';
 
@@ -13,20 +12,17 @@ if ($_SESSION['grupos']==1) {
 
  ?>
     <div class="content-wrapper">
-    <!-- Main content -->
-    <section class="content">
 
-      <!-- Default box -->
+    <section class="content">
+      <?php $activo='listas'; require 'grupo_nav.php'; ?>
+
       <div class="row">
         <div class="col-md-12">
       <div class="box">
-<!--box-header-->
-<!--centro-->
- 
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <input type="hidden" id="idgrupo" name="idgrupo" value="<?php echo $_GET["idgrupo"];?>">
-          <!-- Custom Tabs (Pulled to the right) -->
+
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs pull-right">
               <li class="bg-green">
@@ -46,7 +42,7 @@ if ($_SESSION['grupos']==1) {
                   </div>
                 </div>
               </div>
-              <!-- /.tab-pane -->
+
               <div class="tab-pane" id="tab_2-2">
                 <div class="table-responsive" id="listadoregistros">
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -65,7 +61,6 @@ if ($_SESSION['grupos']==1) {
                 </div>
               </div>
 
-              <!-- /.tab-pane -->
               <div class="tab-pane active" id="tab_3-2">
                 <div class="table-responsive" id="listadoregistros">
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -83,30 +78,29 @@ if ($_SESSION['grupos']==1) {
                   </div>
                 </div>
               </div>
-              <!-- /.tab-pane -->
+
             </div>
-            <!-- /.tab-content -->
+
           </div>
-          <!-- nav-tabs-custom -->
+
         </div>
-<!--fin centro-->
+
       </div>
       </div>
       </div>
-      <!-- /.box -->
 
     </section>
-    <!-- /.content -->
+
   </div>
-<?php 
+<?php
 }else{
- require 'noacceso.php'; 
+ require 'noacceso.php';
 }
 
 require 'footer.php';
  ?>
  <script src="scripts/listasis.js"></script>
- <?php 
+ <?php
 }
 
 ob_end_flush();

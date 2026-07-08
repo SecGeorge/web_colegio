@@ -1,6 +1,5 @@
 var tabla;
 
-//funcion que se ejecuta al inicio
 function init(){
    mostrarform(false);
    listar();
@@ -13,17 +12,12 @@ function init(){
    	guardaryeditar_asis(e);
    })
 
-   //cargamos los items al celect categoria
-
    $("#imagenmuestra").hide();
-
-
 
 }
 
-
 function verificar(id){
-		//obtenemos la fecha actual
+
 	var now = new Date();
 	var day =("0"+now.getDate()).slice(-2);
 	var month=("0"+(now.getMonth()+1)).slice(-2);
@@ -43,7 +37,7 @@ function verificar(id){
 							data=JSON.parse(data);
 							$("#alumn_id").val(data.id);
 						});
-				
+
 				}else if(data=!null && $("#tipo_conducta").val()!=""){
 					 $("#getCodeModal").modal('show');
 				 	$.post("../ajax/conducta.php?op=verificar",{fecha_conducta : today, alumn_id:id, idgrupo:idgrupo},
@@ -61,18 +55,15 @@ function verificar(id){
 					}
 		})
 	limpiar();
-		
+
 }
 
-
-//funcion limpiar
 function limpiar(){
 	$("#idconducta").val("");
 	$("#alumn_id").val("");
 	$("#tipo_conducta").val("");
 	$("#tipo_conducta").selectpicker('refresh');
 
-		//obtenemos la fecha actual
 	var now = new Date();
 	var day =("0"+now.getDate()).slice(-2);
 	var month=("0"+(now.getMonth()+1)).slice(-2);
@@ -81,7 +72,6 @@ function limpiar(){
 	$('#getCodeModal').modal('hide')
 }
 
-//funcion mostrar formulario
 function mostrarform(flag){
 	limpiar();
 	if(flag){
@@ -96,21 +86,17 @@ function mostrarform(flag){
 	}
 }
 
-
-
-//cancelar form
 function cancelarform(){
 	limpiar();
 	mostrarform(false);
 }
 
-//funcion listar
 function listar(){
 	var  team_id = $("#idgrupo").val();
 	tabla=$('#tbllistado').dataTable({
-		"aProcessing": true,//activamos el procedimiento del datatable
-		"aServerSide": true,//paginacion y filrado realizados por el server
-		dom: 'Bfrtip',//definimos los elementos del control de la tabla
+		"aProcessing": true,
+		"aServerSide": true,
+		dom: 'Bfrtip',
 		buttons: [
                   'copyHtml5',
                   'excelHtml5',
@@ -123,18 +109,19 @@ function listar(){
 			data:{idgrupo:team_id},
 			type: "get",
 			dataType : "json",
-			error:function(e){  
+			error:function(e){
 				console.log(e.responseText);
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":10,//paginacion
-		"order":[[0,"desc"]]//ordenar (columna, orden)
+		"iDisplayLength":10,
+		"columnDefs":[{ "targets":[0,4,5], "orderable":false }],
+		"order":[]
 	}).DataTable();
 }
-//funcion para guardaryeditar
+
 function guardaryeditar(e){
-     e.preventDefault();//no se activara la accion predeterminada 
+     e.preventDefault();
      $("#btnGuardar").prop("disabled",true);
      var formData=new FormData($("#formulario")[0]);
 
@@ -155,14 +142,8 @@ function guardaryeditar(e){
      limpiar();
 }
 
-
-
-
-
-
-
 function guardaryeditar_asis(e){
-     e.preventDefault();//no se activara la accion predeterminada 
+     e.preventDefault();
      $("#btnGuardar_asis").prop("disabled",false);
      var formData=new FormData($("#formulario_asis")[0]);
 
@@ -183,7 +164,6 @@ function guardaryeditar_asis(e){
      limpiar();
 }
 
-
 function mostrar(id){
 	$.post("../ajax/alumnos.php?op=mostrar",{idalumno : id},
 		function(data,status)
@@ -203,8 +183,6 @@ function mostrar(id){
 		})
 }
 
-
-//funcion para desactivar
 function desactivar(idalumno){
 	bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
 		if (result) {
@@ -226,6 +204,5 @@ function activar(idalumno){
 		}
 	})
 }
-
 
 init();

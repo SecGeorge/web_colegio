@@ -1,6 +1,6 @@
-<?php 
+<?php
 require_once "../modelos/Alumnos.php";
-if (strlen(session_id())<1) 
+if (strlen(session_id())<1)
 	session_start();
 
 $alumnos=new Alumnos();
@@ -32,14 +32,13 @@ switch ($_GET["op"]) {
 		}
 	}
 	if (empty($id)) {
-		$rspta=$alumnos->insertar($image,$name,$lastname,$email,$address,$phone,$c1_fullname,$c1_address,$c1_phone,$c1_note,$user_id,$team_id); 
+		$rspta=$alumnos->insertar($image,$name,$lastname,$email,$address,$phone,$c1_fullname,$c1_address,$c1_phone,$c1_note,$user_id,$team_id);
 		echo $rspta ? "Datos registrados correctamente" : "No se pudo registrar los datos";
 	}else{
          $rspta=$alumnos->editar($id,$image,$name,$lastname,$email,$address,$phone,$c1_fullname,$c1_address,$c1_phone,$c1_note, $user_id,$team_id);
-		echo $rspta ? "Datos actualizados correctamente" : "No se pudo actualizar los datos"; 
+		echo $rspta ? "Datos actualizados correctamente" : "No se pudo actualizar los datos";
 	}
 		break;
-	
 
 	case 'desactivar':
 		$rspta=$alumnos->desactivar($id);
@@ -49,34 +48,33 @@ switch ($_GET["op"]) {
 		$rspta=$alumnos->activar($id);
 		echo $rspta ? "Datos activados correctamente" : "No se pudo activar los datos";
 	break;
-	
+
 	case 'mostrar':
 		$rspta=$alumnos->mostrar($id);
 		echo json_encode($rspta);
 	break;
 
-
     case 'listar':
         $team_id=$_REQUEST["idgrupo"];
-		$rspta=$alumnos->listar($user_id,$team_id);   
+		$rspta=$alumnos->listar($user_id,$team_id);
 		$data=Array();
 
 		while ($reg=$rspta->fetch_object()) {
 			$data[]=array(
-            "0"=>($reg->is_active)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->id.')"><i class="fa fa-close"></i></button>':'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-primary btn-xs" onclick="activar('.$reg->id.')"><i class="fa fa-check"></i></button>',
-            "1"=>"<img src='../files/articulos/".$reg->image."' height='50px' width='50px'>",
-            "2"=>$reg->name, 
-            "3"=>$reg->lastname,
-            "4"=>$reg->phone,
-            "5"=>$reg->address,
-            "6"=>$reg->email
+            "0"=>"<img src='../files/articulos/".$reg->image."' class='img-circle' style='width:38px;height:38px;object-fit:cover;border:1px solid #e3e3e3;'>",
+            "1"=>$reg->name,
+            "2"=>$reg->lastname,
+            "3"=>$reg->phone,
+            "4"=>$reg->address,
+            "5"=>$reg->email,
+            "6"=>($reg->is_active)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->id.')"><i class="fa fa-close"></i></button>':'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->id.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-primary btn-xs" onclick="activar('.$reg->id.')"><i class="fa fa-check"></i></button>'
               );
 		}
 		$results=array(
-             "sEcho"=>1,//info para datatables
-             "iTotalRecords"=>count($data),//enviamos el total de registros al datatable
-             "iTotalDisplayRecords"=>count($data),//enviamos el total de registros a visualizar
-             "aaData"=>$data); 
+             "sEcho"=>1,
+             "iTotalRecords"=>count($data),
+             "iTotalDisplayRecords"=>count($data),
+             "aaData"=>$data);
 		echo json_encode($results);
 		break;
 }

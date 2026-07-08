@@ -1,17 +1,14 @@
-<?php 
+<?php
 require_once "../modelos/Consultas.php";
-if (strlen(session_id())<1) 
+if (strlen(session_id())<1)
     session_start();
 
 $consulta = new Consultas();
 
-
 $user_id=$_SESSION["idusuario"];
 
-
 switch ($_GET["op"]) {
-	
- 
+
     case 'lista_asistencia':
         $fecha_inicio=$_REQUEST["fecha_inicio"];
         $fecha_fin=$_REQUEST["fecha_fin"];
@@ -34,9 +31,8 @@ switch ($_GET["op"]) {
         $team_id=$_REQUEST["idgrupo"];
         $rsptav=$alumnos->verficar_alumno($user_id,$team_id);
 
-
         if(!empty($rsptav)){
-            // si hay usuarios
+
             ?>
 
         <table id="dataw" class="table table-striped table-bordered table-condensed table-hover">
@@ -54,12 +50,12 @@ switch ($_GET["op"]) {
                 ?>
                 <tr>
                     <td style="width:250px;"><?php echo $reg->name." ".$reg->lastname; ?></td>
-                    <?php 
+                    <?php
                     for($i=0;$i<$range;$i++){
                     $date_at= date("Y-m-d",strtotime($fecha_inicio)+($i*(24*60*60)));
                     $asist=$consulta->listar_asistencia($reg->idalumn,$team_id,$date_at);
                     $regc=$asist->fetch_object()
-                    ?> 
+                    ?>
                     <td >
                     <?php
                     if($regc!=null){
@@ -67,8 +63,8 @@ switch ($_GET["op"]) {
                         else if($regc->kind_id==2){ echo "<strong>T</stron>"; }
                         else if($regc->kind_id==3){ echo "<strong>F</stron>"; }
                         else if($regc->kind_id==4){ echo "<strong>P</stron>"; }
-                        
-                    }   
+
+                    }
                     ?>
 
                     </td>
@@ -83,7 +79,7 @@ switch ($_GET["op"]) {
         }
         ?>
 
-        <script type="text/javascript">         
+        <script type="text/javascript">
             tabla=$('#dataw').DataTable( {
                 dom: 'Bfrtip',
                 buttons: [
@@ -119,9 +115,8 @@ switch ($_GET["op"]) {
         $team_id=$_REQUEST["idgrupo"];
         $rsptav=$alumnos->verficar_alumno($user_id,$team_id);
 
-
         if(!empty($rsptav)){
-            // si hay usuarios
+
             ?>
 
         <table id="dataco" class="table table-striped table-bordered table-condensed table-hover">
@@ -139,12 +134,12 @@ switch ($_GET["op"]) {
                 ?>
                 <tr>
                     <td style="width:250px;"><?php echo $reg->name." ".$reg->lastname; ?></td>
-                    <?php 
+                    <?php
                     for($i=0;$i<$range;$i++){
                     $date_at= date("Y-m-d",strtotime($fecha_inicio)+($i*(24*60*60)));
                     $asist=$consulta->listar_comportamiento($reg->idalumn,$team_id,$date_at);
                     $regc=$asist->fetch_object()
-                    ?> 
+                    ?>
                     <td >
                     <?php
                     if($regc!=null){
@@ -153,8 +148,8 @@ switch ($_GET["op"]) {
                         else if($regc->kind_id==3){ echo "<strong>E</stron>"; }
                         else if($regc->kind_id==4){ echo "<strong>M</stron>"; }
                         else if($regc->kind_id==5){ echo "<strong>MM</stron>"; }
-                        
-                    }   
+
+                    }
                     ?>
 
                     </td>
@@ -169,7 +164,7 @@ switch ($_GET["op"]) {
         }
         ?>
 
-        <script type="text/javascript">         
+        <script type="text/javascript">
             tabla=$('#dataco').DataTable( {
                 dom: 'Bfrtip',
                 buttons: [
@@ -192,26 +187,23 @@ switch ($_GET["op"]) {
         require_once "../modelos/Cursos.php";
         $cursos=new Cursos();
         $rsptac=$cursos->listar($team_id);
-     //           $rsptacurso=$cursos->verficar_curso($team_id);
 
         if(!empty($rsptav)){
 
-
-            // si hay usuarios
             ?>
 
         <table id="dataca" class="table table-striped table-bordered table-condensed table-hover">
             <thead>
             <th>Nombre</th>
             <?php
-            //OBTENEMOS LOS DAOTOS DEL CURSO
+
                 while ($reg=$rsptac->fetch_object()) {
                       echo '<th>'.$reg->name.'</th>';
                 }?>
 
             </thead>
             <?php
-            //OBTENEMOS LOS DATOS DEL ALUMNO
+
             $rspta=$alumnos->listar_calif($user_id,$team_id);
             while ($reg=$rspta->fetch_object()) {
                 ?>
@@ -219,37 +211,28 @@ switch ($_GET["op"]) {
                 <td><?php echo $reg->name." ".$reg->lastname; ?></td>
 
                  <?php
-                 //OBTENEMOS EL ID DEL CURSO
+
                 require_once "../modelos/Cursos.php";
                 $cursos=new Cursos();
                 $rsptacurso=$cursos->listar($team_id);
                 while ($regc=$rsptacurso->fetch_object()) {
                     $idcurso=$regc->id;
-                    $idalumno=$reg->idalumn; 
+                    $idalumno=$reg->idalumn;
 
-                //OBTENEMOS LAS NOTAS ENVIANDO LOS PARAMETROS ($idcurso Y $idalumno)
                 require_once "../modelos/Calificaciones.php";
                 $calificaciones=new Calificaciones();
                 $rsptacalif=$calificaciones->listar_calificacion($idalumno,$idcurso);
                   $regn=$rsptacalif->fetch_object();?>
                      <td><?php if($regn!=null ){
-                                    echo $regn->val; 
+                                    echo $regn->val;
                                 }
                                  ?></td>
 
-
-
-
                <?php } ?>
-
 
                 </tr>
 
                 <?php
-
-
-
-
 
             }?>
             </table>
@@ -258,7 +241,7 @@ switch ($_GET["op"]) {
             echo "<p class='alert alert-danger'>No hay Alumnos</p>";
         }
 ?>
-        <script type="text/javascript">         
+        <script type="text/javascript">
             tabla=$('#dataca').DataTable( {
                 dom: 'Bfrtip',
                 buttons: [
@@ -270,7 +253,6 @@ switch ($_GET["op"]) {
                 } );
         </script>
 <?php
-
 
     break;
 }

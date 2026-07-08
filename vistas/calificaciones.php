@@ -6,7 +6,6 @@ if (!isset($_SESSION['nombre'])) {
   header("Location: login.html");
 }else{
 
-
 require 'header.php';
 
 if ($_SESSION['grupos']==1) {
@@ -14,7 +13,7 @@ if ($_SESSION['grupos']==1) {
  ?>
     <div class="content-wrapper">
     <section class="content">
-
+      <?php $activo='calificaciones'; require 'grupo_nav.php'; ?>
 
       <div class="row">
         <div class="col-md-12">
@@ -35,43 +34,37 @@ if ($_SESSION['grupos']==1) {
 
   </div>
 
-
-
 <div class="panel-body table-responsive" id="listadoregistros">
   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover">
     <thead>
-      <th>Opciones</th>
       <th>Imagen</th>
       <th>Nombre</th>
       <th>Apellidos</th>
       <th>Telefono</th>
       <th>Asistencia</th>
+      <th>Opciones</th>
     </thead>
     <tbody>
     </tbody>
     <tfoot>
-      <th>Opciones</th>
       <th>Imagen</th>
       <th>Nombre</th>
       <th>Apellidos</th>
       <th>Telefono</th>
       <th>Asistencia</th>
-    </tfoot>   
+      <th>Opciones</th>
+    </tfoot>
   </table>
 </div>
 
-<!--fin centro-->
       </div>
       </div>
       </div>
-      <!-- /.box -->
 
     </section>
-    <!-- /.content -->
+
   </div>
 
-
-  <!--Modal-->
   <div class="modal fade" id="getCodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -103,16 +96,15 @@ if ($_SESSION['grupos']==1) {
     </div>
   </div>
 
-
-<?php 
+<?php
 }else{
- require 'noacceso.php'; 
+ require 'noacceso.php';
 }
 
 require 'footer.php';
  ?>
  <script src="scripts/calificaciones.js"></script>
- <?php 
+ <?php
 }
 
 ob_end_flush();

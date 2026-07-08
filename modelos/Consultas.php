@@ -1,21 +1,18 @@
-<?php 
-//incluir la conexion de base de datos
+<?php
+
 require "../config/Conexion.php";
 class Consultas{
 
-
-	//implementamos nuestro constructor
 public function __construct(){
 
 }
 
-//listar registros
 public function listar_asistencia($alumn_id,$team_id,$date_at){
 
 	$sql="SELECT * FROM assistance a INNER JOIN alumn p ON a.alumn_id=p.id INNER JOIN team t ON a.team_id=t.idgrupo  WHERE a.alumn_id='$alumn_id' AND a.team_id='$team_id' AND a.date_at='$date_at'";
 	return ejecutarConsulta($sql);
 }
-  
+
 public function listar_comportamiento($alumn_id,$team_id,$date_at){
 
 	$sql="SELECT * FROM behavior a INNER JOIN alumn p ON a.alumn_id=p.id INNER JOIN team t ON a.team_id=t.idgrupo  WHERE a.alumn_id='$alumn_id' AND a.team_id='$team_id' AND a.date_at='$date_at'";
@@ -27,7 +24,7 @@ public function ventasfechacliente($fecha_inicio,$fecha_fin,$idcliente){
 	return ejecutarConsulta($sql);
 }
 
-public function totalcomprahoy(){  
+public function totalcomprahoy(){
 	$sql="SELECT IFNULL(SUM(total_compra),0) as total_compra FROM ingreso WHERE DATE(fecha_hora)=curdate()";
 	return ejecutarConsulta($sql);
 }
@@ -49,25 +46,32 @@ public function ventasultimos_12meses(){
 
 public function cantidadalumnos($user_id){
 	$sql="SELECT COUNT(*) total_alumnos FROM alumn WHERE user_id='$user_id'";
-	
 
 	return ejecutarConsulta($sql);
 }
 public function cantidadalumnos_porgrupo($user_id,$idgrupo){
 	$sql="SELECT a.id as idalumno, a.name,a.lastname,a.image  FROM alumn a INNER JOIN alumn_team alt ON a.id=alt.alumn_id WHERE a.user_id='$user_id' AND alt.team_id='$idgrupo'";
-	
-	
-	return ejecutarConsulta($sql); 
+
+	return ejecutarConsulta($sql);
 }
 public function cantidadg($user_id,$idgrupo){
 	$sql="SELECT COUNT(*) total_alumnos  FROM alumn a INNER JOIN alumn_team alt ON a.id=alt.alumn_id WHERE a.user_id='$user_id' AND alt.team_id='$idgrupo'";
-	
 
 	return ejecutarConsulta($sql);
 }
 
 public function cantidadgrupos($idusuario){
 	$sql="SELECT idgrupo,nombre, idusuario, favorito FROM team WHERE idusuario='$idusuario'";
+	return ejecutarConsulta($sql);
+}
+
+public function gradosDeProfesor($idusuario){
+	$sql="SELECT DISTINCT t.idgrupo,t.nombre,t.idusuario,t.favorito FROM team t INNER JOIN block b ON b.team_id=t.idgrupo WHERE b.idusuario='$idusuario' ORDER BY t.idgrupo";
+	return ejecutarConsulta($sql);
+}
+
+public function cantidadPorGrado($idgrupo){
+	$sql="SELECT COUNT(*) total_alumnos FROM alumn a INNER JOIN alumn_team alt ON a.id=alt.alumn_id WHERE alt.team_id='$idgrupo' AND a.is_active=1";
 	return ejecutarConsulta($sql);
 }
 

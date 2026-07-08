@@ -1,14 +1,11 @@
 var tabla;
 
-//funcion que se ejecuta al inicio
 function init(){
    mostrarform(false);
    listar();
 
 }
 
-
-//funcion mostrar formulario
 function mostrarform(flag){
 	if(flag){
 		$("#listadoregistros").hide();
@@ -22,13 +19,11 @@ function mostrarform(flag){
 	}
 }
 
-
-//funcion listar
 function listar(){
 	tabla=$('#tbllistado').dataTable({
-		"aProcessing": true,//activamos el procedimiento del datatable
-		"aServerSide": true,//paginacion y filrado realizados por el server
-		dom: 'Bfrtip',//definimos los elementos del control de la tabla
+		"aProcessing": true,
+		"aServerSide": true,
+		dom: 'Bfrtip',
 		buttons: [
                   'copyHtml5',
                   'excelHtml5',
@@ -45,10 +40,9 @@ function listar(){
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":5,//paginacion
-		"order":[[0,"desc"]]//ordenar (columna, orden)
+		"iDisplayLength":5,
+		"order":[[0,"desc"]]
 	}).DataTable();
 }
-
 
 init();

@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 require_once "../modelos/Usuario.php";
 
@@ -21,7 +21,7 @@ $imagen=isset($_POST["imagen"])? limpiarCadena($_POST["imagen"]):"";
 switch ($_GET["op"]) {
 	case 'guardaryeditar':
 
-		if (!file_exists($_FILES['imagen']['tmp_name'])|| !is_uploaded_file($_FILES['imagen']['tmp_name'])) 
+		if (!file_exists($_FILES['imagen']['tmp_name'])|| !is_uploaded_file($_FILES['imagen']['tmp_name']))
 		{
 			$imagen=$_POST["imagenactual"];
 		}else
@@ -36,7 +36,6 @@ switch ($_GET["op"]) {
 		 	}
 		}
 
-		//Hash SHA256 para la contraseña
 		$clavehash=hash("SHA256", $clave);
 
 		if (empty($idusuario)) {
@@ -48,7 +47,6 @@ switch ($_GET["op"]) {
 			echo $rspta ? "Datos actualizados correctamente" : "No se pudo actualizar los datos";
 		}
 	break;
-	
 
 	case 'desactivar':
 		$rspta=$usuario->desactivar($idusuario);
@@ -59,7 +57,7 @@ switch ($_GET["op"]) {
 		$rspta=$usuario->activar($idusuario);
 		echo $rspta ? "Datos activados correctamente" : "No se pudo activar los datos";
 	break;
-	
+
 	case 'mostrar':
 		$rspta=$usuario->mostrar($idusuario);
 		echo json_encode($rspta);
@@ -76,56 +74,52 @@ switch ($_GET["op"]) {
 		$rspta=$usuario->mostrar_clave($idusuario);
 		echo json_encode($rspta);
 	break;
-	
+
 	case 'listar':
 		$rspta=$usuario->listar();
-		//declaramos un array
-		$data=Array();
 
+		$data=Array();
 
 		while ($reg=$rspta->fetch_object()) {
 			$data[]=array(
-				"0"=>($reg->condicion)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idusuario.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-info btn-xs" onclick="mostrar_clave('.$reg->idusuario.')"><i class="fa fa-key"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->idusuario.')"><i class="fa fa-close"></i></button>':'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idusuario.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-info btn-xs" onclick="mostrar_clave('.$reg->idusuario.')"><i class="fa fa-key"></i></button>'.' '.'<button class="btn btn-primary btn-xs" onclick="activar('.$reg->idusuario.')"><i class="fa fa-check"></i></button>',
-				"1"=>$reg->nombre,
-				"2"=>$reg->tipo_documento,
-				"3"=>$reg->num_documento,
-				"4"=>$reg->telefono,
-				"5"=>$reg->email,
-				"6"=>$reg->login,
-				"7"=>"<img src='../files/usuarios/".$reg->imagen."' height='50px' width='50px'>",
-				"8"=>($reg->condicion)?'<span class="label bg-green">Activado</span>':'<span class="label bg-red">Desactivado</span>'
+				"0"=>$reg->nombre,
+				"1"=>$reg->tipo_documento,
+				"2"=>$reg->num_documento,
+				"3"=>$reg->telefono,
+				"4"=>$reg->email,
+				"5"=>$reg->login,
+				"6"=>"<img src='../files/usuarios/".$reg->imagen."' class='img-circle' style='width:38px;height:38px;object-fit:cover;border:1px solid #e3e3e3;'>",
+				"7"=>($reg->condicion)?'<span class="label bg-green">Activado</span>':'<span class="label bg-red">Desactivado</span>',
+				"8"=>($reg->condicion)?'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idusuario.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-info btn-xs" onclick="mostrar_clave('.$reg->idusuario.')"><i class="fa fa-key"></i></button>'.' '.'<button class="btn btn-danger btn-xs" onclick="desactivar('.$reg->idusuario.')"><i class="fa fa-close"></i></button>':'<button class="btn btn-warning btn-xs" onclick="mostrar('.$reg->idusuario.')"><i class="fa fa-pencil"></i></button>'.' '.'<button class="btn btn-info btn-xs" onclick="mostrar_clave('.$reg->idusuario.')"><i class="fa fa-key"></i></button>'.' '.'<button class="btn btn-primary btn-xs" onclick="activar('.$reg->idusuario.')"><i class="fa fa-check"></i></button>'
 				);
 		}
 
 		$results=array(
-             "sEcho"=>1,//info para datatables
-             "iTotalRecords"=>count($data),//enviamos el total de registros al datatable
-             "iTotalDisplayRecords"=>count($data),//enviamos el total de registros a visualizar
-             "aaData"=>$data); 
+             "sEcho"=>1,
+             "iTotalRecords"=>count($data),
+             "iTotalDisplayRecords"=>count($data),
+             "aaData"=>$data);
 		echo json_encode($results);
 
 	break;
 
 	case 'permisos':
-		//obtenemos toodos los permisos de la tabla permisos
+
 		require_once "../modelos/Permiso.php";
 		$permiso=new Permiso();
 		$rspta=$permiso->listar();
 
-		//obtener permisos asigandos
 		$id=$_GET['id'];
 		$marcados=$usuario->listarmarcados($id);
-		//declaramos el array para almacenar todos los permisos marcados
+
 		$valores=array();
 
-		//almacenar permisos asigandos
-		while ($per = $marcados->fetch_object()) 
+		while ($per = $marcados->fetch_object())
 			{
 				array_push($valores, $per->idpermiso);
 			}
 
-		//mostramos la lista de permisos
-		while ($reg=$rspta->fetch_object()) 
+		while ($reg=$rspta->fetch_object())
 			{
 				$sw=in_array($reg->idpermiso,$valores)?'checked':'';
 				echo '<li><input type="checkbox" '.$sw.' name="permiso[]" value="'.$reg->idpermiso.'">'.$reg->nombre.'</li>';
@@ -133,18 +127,17 @@ switch ($_GET["op"]) {
 	break;
 
 	case 'verificar':
-		//validar si el usuario tiene acceso al sistema
+
 		$logina=$_POST['logina'];
 		$clavea=$_POST['clavea'];
 
-		//Hash SHA256 en la contraseña
 		$clavehash=hash("SHA256", $clavea);
-	
+
 		$rspta=$usuario->verificar($logina, $clavehash);
 
 		$fetch=$rspta->fetch_object();
 
-		if (isset($fetch)) 
+		if (isset($fetch))
 		{
 			# Declaramos la variables de sesion
 			$_SESSION['idusuario']=$fetch->idusuario;
@@ -153,23 +146,18 @@ switch ($_GET["op"]) {
 			$_SESSION['login']=$fetch->login;
 			$_SESSION['cargo']=$fetch->cargo;
 
-			//obtenemos los permisos
 			$marcados = $usuario->listarmarcados($fetch->idusuario);
 
-			//declaramos el array para almacenar todos los permisos
 			$valores=array();
 
-			//almacenamos los permisos marcados en al array
-			while ($per = $marcados->fetch_object()) 
+			while ($per = $marcados->fetch_object())
 			{
 				array_push($valores, $per->idpermiso);
 			}
 
-			//determinamos lo accesos al usuario
 			in_array(1, $valores)?$_SESSION['escritorio']=1:$_SESSION['escritorio']=0;
 			in_array(2, $valores)?$_SESSION['grupos']=1:$_SESSION['grupos']=0;
 			in_array(3, $valores)?$_SESSION['acceso']=1:$_SESSION['acceso']=0;
-
 
 		}
 		echo json_encode($fetch);
@@ -177,11 +165,11 @@ switch ($_GET["op"]) {
 	break;
 
 	case 'salir':
-		//Limpiamos las variables de sesión   
+
         session_unset();
-        //Destruìmos la sesión
+
         session_destroy();
-        //Redireccionamos al login
+
         header("Location: ../index.php");
 
 	break;

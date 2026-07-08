@@ -1,6 +1,5 @@
 var tabla;
 
-//funcion que se ejecuta al inicio
 function init(){
    mostrarform(false);
    listar();
@@ -10,14 +9,12 @@ function init(){
    })
 }
 
-//funcion limpiar
 function limpiar(){
 	$("#idgrupo").val("");
 	$("#nombre").val("");
-	$("#favorito").val(""); 
+	$("#favorito").val("");
 }
- 
-//funcion mostrar formulario
+
 function mostrarform(flag){
 	limpiar();
 	if(flag){
@@ -32,18 +29,16 @@ function mostrarform(flag){
 	}
 }
 
-//cancelar form
 function cancelarform(){
 	limpiar();
 	mostrarform(false);
 }
 
-//funcion listar
 function listar(){
 	tabla=$('#tbllistado').dataTable({
-		"aProcessing": true,//activamos el procedimiento del datatable
-		"aServerSide": true,//paginacion y filrado realizados por el server
-		dom: 'Bfrtip',//definimos los elementos del control de la tabla
+		"aProcessing": true,
+		"aServerSide": true,
+		dom: 'Bfrtip',
 		buttons: [
                   'copyHtml5',
                   'excelHtml5',
@@ -60,13 +55,14 @@ function listar(){
 			}
 		},
 		"bDestroy":true,
-		"iDisplayLength":10,//paginacion
-		"order":[[0,"desc"]]//ordenar (columna, orden)
+		"iDisplayLength":10,
+		"columnDefs":[{ "targets":[2], "orderable":false }],
+		"order":[]
 	}).DataTable();
 }
-//funcion para guardaryeditar
+
 function guardaryeditar(e){
-     e.preventDefault();//no se activara la accion predeterminada 
+     e.preventDefault();
      $("#btnGuardar").prop("disabled",true);
      var formData=new FormData($("#formulario")[0]);
 
@@ -104,8 +100,6 @@ function mostrar(idgrupo){
 		})
 }
 
-
-//funcion para desactivar
 function desactivar(idgrupo){
 	bootbox.confirm("¿Esta seguro de desactivar este dato?", function(result){
 		if (result) {
